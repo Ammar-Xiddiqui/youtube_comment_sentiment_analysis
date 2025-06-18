@@ -5,10 +5,14 @@ import joblib
 import numpy as np
 from collections import Counter
 import re
+import os
 
-API_KEY = "YOUR_API_KEY"
+# ✅ Get API key from environment variable
+API_KEY = os.environ.get("API_KEY")
 
 app = Flask(__name__)
+
+# ✅ Load sentiment model
 model = joblib.load("model/sentiment_model.pkl")
 tp = TextProcessor()
 
@@ -63,5 +67,7 @@ def analyze():
         }
     })
 
+# ✅ Production-safe run block for Render
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
